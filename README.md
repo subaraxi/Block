@@ -1,8 +1,9 @@
 # Hide Blocked Messages for Discord
 
-A tiny Chrome extension for Discord in the browser. When you've blocked
+A tiny Chrome extension (Chrome 105 or newer) for Discord in the browser. When you've blocked
 someone, Discord still shows a **"1 blocked message — Show message"** bar in
-chat. This extension hides that bar completely, so it's as if the messages
+chat, and replies to blocked users show a **"Replying to a blocked
+message"** line. This extension hides both, so it's as if the messages
 don't exist.
 
 ## Install
@@ -17,20 +18,24 @@ don't exist.
 
 | File            | What it does                                                     |
 | --------------- | ---------------------------------------------------------------- |
-| `manifest.json` | Tells Chrome to run the script on discord.com.                   |
-| `content.js`    | Finds blocked-message bars and marks them as hidden.             |
-| `styles.css`    | Hides anything that `content.js` marked.                         |
+| `manifest.json` | Tells Chrome to add `styles.css` to discord.com.                 |
+| `styles.css`    | CSS rules that hide blocked-message bars and reply lines.        |
+
+## Is it safe?
+
+Yes. The extension contains no JavaScript at all, only CSS that changes how
+the page looks. It asks for no permissions, can't read your messages or
+account, sends nothing anywhere, and only runs on discord.com.
 
 ## If it stops working
 
 Discord sometimes renames the classes in its page. Open DevTools on
 Discord (`F12`), right-click a blocked-message bar → **Inspect**, and find
-its class name. Then update `BLOCKED_BAR_SELECTOR` at the top of
-`content.js` and click the reload icon for the extension on
+its class name. Then update the matching rule in `styles.css` and click the reload icon for the extension on
 `chrome://extensions`.
 
 ## Limits
 
-- Only the "blocked message" bars in chat are hidden. Replies that quote a
-  blocked user ("Replying to a blocked message") still show.
+- When someone replies to a blocked user, only the "Replying to a blocked
+  message" line is hidden. Their reply itself still shows.
 - Works on discord.com in the browser, not the Discord desktop app.
