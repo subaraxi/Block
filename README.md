@@ -2,7 +2,8 @@
 
 A tiny Chrome extension (Chrome 105 or newer) for Discord in the browser. When you've blocked
 someone, Discord still shows a **"1 blocked message — Show message"** bar in
-chat. This extension hides that bar completely, so it's as if the messages
+chat, and replies to blocked users show a **"Replying to a blocked
+message"** line. This extension hides both, so it's as if the messages
 don't exist.
 
 ## Install
@@ -18,7 +19,7 @@ don't exist.
 | File            | What it does                                                     |
 | --------------- | ---------------------------------------------------------------- |
 | `manifest.json` | Tells Chrome to add `styles.css` to discord.com.                 |
-| `styles.css`    | Two CSS rules that hide the blocked-message bars.                |
+| `styles.css`    | CSS rules that hide blocked-message bars and reply lines.        |
 
 ## Is it safe?
 
@@ -30,11 +31,11 @@ account, sends nothing anywhere, and only runs on discord.com.
 
 Discord sometimes renames the classes in its page. Open DevTools on
 Discord (`F12`), right-click a blocked-message bar → **Inspect**, and find
-its class name. Then update `blockedSystemMessage` in `styles.css` and click the reload icon for the extension on
+its class name. Then update the matching rule in `styles.css` and click the reload icon for the extension on
 `chrome://extensions`.
 
 ## Limits
 
-- Only the "blocked message" bars in chat are hidden. Replies that quote a
-  blocked user ("Replying to a blocked message") still show.
+- When someone replies to a blocked user, only the "Replying to a blocked
+  message" line is hidden. Their reply itself still shows.
 - Works on discord.com in the browser, not the Discord desktop app.
