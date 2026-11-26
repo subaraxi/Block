@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hide Blocked Messages</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --background: #ffffff;
+        --text: #1e1f22;
+        --muted: #5c5e66;
+        --button: #4e5058;
+        --button-text: #ffffff;
+        --primary: #d83c3e;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background: #2b2d31;
+          --text: #f2f3f5;
+          --muted: #b5bac1;
+          --button: #4e5058;
+        }
+      }
+
+      body {
+        width: 280px;
+        margin: 0;
+        padding: 16px;
+        background: var(--background);
+        color: var(--text);
+        font: 14px/1.45 system-ui, sans-serif;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 16px;
+      }
+
+      p {
+        margin: 0 0 12px;
+        color: var(--muted);
+      }
+
+      button {
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 9px 12px;
+        border: 0;
+        border-radius: 6px;
+        background: var(--button);
+        color: var(--button-text);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button.primary {
+        background: var(--primary);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      #status {
+        min-height: 1.45em;
+        margin: 4px 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hide Blocked Messages</h1>
+    <p>Still seeing a blocked message? Click "Fix it", then click the message.</p>
+
+    <button id="fix-it" class="primary">Fix it</button>
+    <button id="undo">Undo my fixes</button>
+
+    <p id="status"></p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

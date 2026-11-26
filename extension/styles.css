@@ -8,8 +8,11 @@
  *
  * Discord's class names have random endings that change between updates
  * (e.g. "blockedSystemMessage_a1b2c3"), so we match only the part of the
- * name that stays the same. If Discord renames it, update
- * "blockedSystemMessage" in both rules below.
+ * name that stays the same.
+ *
+ * If Discord renames something, users can fix it themselves with the
+ * "Fix it" button (see content.js). To fix it for everyone, update the
+ * names below and publish a new version (see PUBLISHING.md).
  */
 
 /*
