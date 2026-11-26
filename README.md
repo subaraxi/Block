@@ -1,6 +1,6 @@
-# Hide Blocked Messages for Discord
+# Block for Real
 
-Hides messages from people you blocked on Discord, including the "blocked message" bars.
+Hide blocked users on Discord. For real: no more "blocked message" bars.
 
 ## Install
 
