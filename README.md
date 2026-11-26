@@ -23,6 +23,13 @@ the message → **OK**. To undo, click the icon → **Undo my fixes**.
 If your Discord isn't in English, do this once on a "Blocked message" reply
 line.
 
+## Hide replies to blocked people too
+
+By default, when someone you didn't block replies to someone you did, only
+the "Blocked message" line above their reply is hidden. To hide the whole
+reply, click the extension icon and tick **Also hide replies to blocked
+people**.
+
 ## Is it safe?
 
 Yes. It only runs on discord.com, can't read your messages or account, and

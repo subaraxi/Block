@@ -3,18 +3,25 @@
  *
  * "Fix it"        asks the Discord tab (content.js) to start "Fix it" mode.
  * "Undo my fixes" deletes every fix the user has saved.
+ * The checkbox    turns "Also hide replies to blocked people" on or off.
  */
 
 const fixItButton = document.getElementById('fix-it');
 const undoButton = document.getElementById('undo');
 const statusText = document.getElementById('status');
+const hideWholeRepliesBox = document.getElementById('hide-whole-replies');
 
-async function showFixCount() {
-  const { fixes } = await chrome.storage.sync.get({ fixes: [] });
+async function showCurrentSettings() {
+  const { fixes, hideWholeReplies } = await chrome.storage.sync.get({
+    fixes: [],
+    hideWholeReplies: false,
+  });
 
   undoButton.disabled = fixes.length === 0;
   undoButton.textContent =
     fixes.length === 0 ? 'Undo my fixes' : `Undo my fixes (${fixes.length})`;
+
+  hideWholeRepliesBox.checked = hideWholeReplies;
 }
 
 fixItButton.addEventListener('click', async () => {
@@ -33,7 +40,11 @@ fixItButton.addEventListener('click', async () => {
 undoButton.addEventListener('click', async () => {
   await chrome.storage.sync.set({ fixes: [] });
   statusText.textContent = 'All your fixes were removed.';
-  showFixCount();
+  showCurrentSettings();
 });
 
-showFixCount();
+hideWholeRepliesBox.addEventListener('change', () => {
+  chrome.storage.sync.set({ hideWholeReplies: hideWholeRepliesBox.checked });
+});
+
+showCurrentSettings();

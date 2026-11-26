@@ -74,6 +74,9 @@ document.documentElement.append(nameFixesStyle);
 
 let blockedTexts = [...BUILT_IN_BLOCKED_TEXTS];
 
+// The "Also hide replies to blocked people" switch in the popup.
+let hideWholeReplies = false;
+
 // Does any part of `container` show exactly `text`?
 function showsText(container, text) {
   for (const element of container.querySelectorAll('*')) {
@@ -86,11 +89,63 @@ function isBlockedReplyLine(replyLine) {
   return blockedTexts.some((text) => showsText(replyLine, text));
 }
 
-// Check every reply line on the page and hide or show it.
-// It's re-checked every time, so if you unblock someone it shows again.
+function hide(element) {
+  element.setAttribute(HIDDEN_ATTRIBUTE, '');
+}
+
+// The chat row (one message) that `element` is in, if any.
+function rowOf(element) {
+  const messageList = element.closest(MESSAGE_LIST);
+  if (!messageList) return null;
+
+  let row = element;
+  while (row.parentElement !== messageList) row = row.parentElement;
+  return row;
+}
+
+// Discord marks the first message of each group (the one showing the
+// sender's name) with a "groupStart" class name.
+const GROUP_START = '[class*="groupStart"]';
+
+function startsNewGroup(row) {
+  return row.matches(GROUP_START) || row.querySelector(GROUP_START) !== null;
+}
+
+// Hide a reply, plus the messages the same person sent right after it.
+// Those don't show a name, so leaving them would make them look like they
+// came from whoever posted before.
+function hideReplyAndFollowUps(row) {
+  hide(row);
+
+  // If Discord stops marking groups, we can't tell where this person's
+  // messages end, so we stop here rather than risk hiding someone else's.
+  const messageList = row.parentElement;
+  if (!messageList.querySelector(GROUP_START)) return;
+
+  let next = row.nextElementSibling;
+  while (next && next.tagName === 'LI' && !startsNewGroup(next)) {
+    hide(next);
+    next = next.nextElementSibling;
+  }
+}
+
+// Check every reply line on the page and hide what should be hidden.
+// Everything is re-checked from scratch each time, so if you unblock
+// someone or turn the switch off, their messages show again.
 function updateReplyLines() {
+  for (const element of document.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`)) {
+    element.removeAttribute(HIDDEN_ATTRIBUTE);
+  }
+
   for (const replyLine of document.querySelectorAll(REPLY_LINE)) {
-    replyLine.toggleAttribute(HIDDEN_ATTRIBUTE, isBlockedReplyLine(replyLine));
+    if (!isBlockedReplyLine(replyLine)) continue;
+
+    const row = rowOf(replyLine);
+    if (hideWholeReplies && row) {
+      hideReplyAndFollowUps(row);
+    } else {
+      hide(replyLine);
+    }
   }
 }
 
@@ -115,10 +170,12 @@ pageWatcher.observe(document.documentElement, {
   subtree: true, // anywhere on the page
 });
 
-/* ---------- Loading saved fixes ---------- */
+/* ---------- Loading saved fixes and settings ---------- */
 
 async function loadFixes() {
-  const { fixes } = await chrome.storage.sync.get({ fixes: [] });
+  const saved = await chrome.storage.sync.get({ fixes: [], hideWholeReplies: false });
+  const fixes = Array.isArray(saved.fixes) ? saved.fixes : [];
+  hideWholeReplies = saved.hideWholeReplies === true;
   const validFixes = fixes.filter(isValidFix);
 
   const nameFixes = validFixes.filter((fix) => 'name' in fix);
@@ -133,7 +190,7 @@ async function loadFixes() {
 
 loadFixes();
 
-// Re-apply when fixes are added or undone (also from other tabs).
+// Re-apply when fixes or settings change (also from other tabs).
 chrome.storage.onChanged.addListener(loadFixes);
 
 /* ------------------------------------------------------------------ */
@@ -145,12 +202,8 @@ function whatToHide(element) {
   const replyLine = element.closest(REPLY_LINE);
   if (replyLine) return { target: replyLine, where: 'reply' };
 
-  const messageList = element.closest(MESSAGE_LIST);
-  if (messageList && messageList !== element) {
-    let row = element;
-    while (row.parentElement !== messageList) row = row.parentElement;
-    return { target: row, where: 'row' };
-  }
+  const row = element.matches(MESSAGE_LIST) ? null : rowOf(element);
+  if (row) return { target: row, where: 'row' };
 
   return { target: element, where: 'self' };
 }
