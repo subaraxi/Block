@@ -1,6 +1,7 @@
 /*
  * styles.css hides the blocked-message bars. This file adds:
- *   Part 1: hiding "Blocked message" reply lines (CSS can't match text).
+ *   Part 1: hiding "Blocked message" reply lines (CSS can't match text),
+ *           and date lines left with no messages under them.
  *   Part 2: the "Fix it" tool for when a Discord update breaks the hiding.
  * Fixes are saved in Chrome's storage. Nothing is sent anywhere.
  */
@@ -129,10 +130,38 @@ function hideReplyAndFollowUps(row) {
   }
 }
 
-// Check every reply line on the page and hide what should be hidden.
-// Everything is re-checked from scratch each time, so if you unblock
-// someone or turn the switch off, their messages show again.
-function updateReplyLines() {
+// Date lines ("November 25, 2026") are dividers in the chat list.
+// Discord's red "NEW" unread line is a divider too, so we only count
+// dividers that contain a number (the date).
+const DIVIDER = '[role="separator"]';
+
+function isDateLine(element) {
+  return element.matches(DIVIDER) && /\d/.test(element.textContent);
+}
+
+// Is any message under this date line still visible?
+function hasVisibleMessages(dateLine) {
+  for (let next = dateLine.nextElementSibling; next; next = next.nextElementSibling) {
+    if (isDateLine(next)) return false; // Reached the next day.
+    if (next.tagName === 'LI' && next.checkVisibility()) return true;
+  }
+  return false;
+}
+
+// Hide date lines that have no visible messages left under them, so there's
+// no trace of a day that only had blocked messages.
+function hideEmptyDateLines() {
+  const dateLines = [...document.querySelectorAll(`${MESSAGE_LIST} > ${DIVIDER}`)].filter(isDateLine);
+
+  // Check them all first, then hide, so hiding one can't affect the others.
+  const emptyDateLines = dateLines.filter((dateLine) => !hasVisibleMessages(dateLine));
+  emptyDateLines.forEach(hide);
+}
+
+// Work out from scratch what should be hidden. This runs every time the page
+// changes, so if you unblock someone or turn the switch off, their messages
+// (and date lines) show again.
+function updatePage() {
   for (const element of document.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`)) {
     element.removeAttribute(HIDDEN_ATTRIBUTE);
   }
@@ -147,11 +176,13 @@ function updateReplyLines() {
       hide(replyLine);
     }
   }
+
+  hideEmptyDateLines();
 }
 
 // Discord changes the page all the time (scrolling, new messages, switching
-// channels). When it does, re-check the reply lines once, just before the
-// screen is redrawn, so a blocked line never flashes up.
+// channels). When it does, re-check the page once, just before the screen
+// is redrawn, so nothing blocked ever flashes up.
 let updateIsScheduled = false;
 
 const pageWatcher = new MutationObserver(() => {
@@ -160,7 +191,7 @@ const pageWatcher = new MutationObserver(() => {
 
   requestAnimationFrame(() => {
     updateIsScheduled = false;
-    updateReplyLines();
+    updatePage();
   });
 });
 
@@ -185,7 +216,7 @@ async function loadFixes() {
 
   const textFixes = validFixes.filter((fix) => 'text' in fix);
   blockedTexts = [...BUILT_IN_BLOCKED_TEXTS, ...textFixes.map((fix) => fix.text)];
-  updateReplyLines();
+  updatePage();
 }
 
 loadFixes();

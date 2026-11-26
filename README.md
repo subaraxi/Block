@@ -2,7 +2,8 @@
 
 A Chrome extension that completely hides messages from people you've blocked
 on Discord in the browser: the "1 blocked message — Show message" bars, and
-the "Blocked message" line above replies to them.
+the "Blocked message" line above replies to them. Date lines left empty are
+hidden too, so there's no trace.
 
 ## Install
 
