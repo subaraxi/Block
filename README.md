@@ -7,11 +7,6 @@ extension hides both, so it's as if their messages don't exist.
 
 ## Install
 
-**From the Chrome Web Store (recommended):** _link coming soon_. Installing
-from the store means you get fixes automatically.
-
-**Manually:**
-
 1. On this page, click the green **Code** button → **Download ZIP**, then unzip it.
 2. Open `chrome://extensions` in Chrome and turn on **Developer mode** (top right).
 3. Click **Load unpacked** and choose the **`extension`** folder inside the
@@ -30,6 +25,13 @@ again, you can fix it in a few seconds:
 
 It stays hidden from then on. Changed your mind? Click the icon → **Undo my
 fixes**.
+
+## Getting a newer version
+
+Your fixes keep working, so you only need this if you want new features:
+download the ZIP again, replace your old folder with the new one (same place,
+same name), then click the reload icon on the extension in
+`chrome://extensions`.
 
 ## Is it safe?
 
@@ -58,4 +60,3 @@ See [PRIVACY.md](PRIVACY.md) for the full privacy policy.
 | `extension/styles.css`    | The rules that hide blocked messages.                          |
 | `extension/content.js`    | The "Fix it" tool, plus applying the fixes you've saved.       |
 | `extension/popup.html/js` | The small window that opens when you click the icon.           |
-| `PUBLISHING.md`           | How to publish and update the extension on the Web Store.      |
