@@ -1,9 +1,32 @@
 /*
- * Anything content.js marks with this attribute disappears.
- * We use an attribute instead of a class because Discord (React) rewrites
- * an element's class list when it re-renders, but leaves unknown
- * attributes alone.
+ * Hide Blocked Messages for Discord
+ *
+ * When you block someone, Discord still shows a bar in chat:
+ *   "1 blocked message — Show message"
+ * These rules hide that bar completely, so it looks like the messages
+ * were never there.
+ *
+ * Discord's class names have random endings that change between updates
+ * (e.g. "blockedSystemMessage_a1b2c3"), so we match only the part of the
+ * name that stays the same. If Discord renames it, update
+ * "blockedSystemMessage" in both rules below.
  */
-[data-hidden-blocked-message] {
+
+/*
+ * Rule 1: in the chat, hide the whole row that holds the blocked bar,
+ * so no empty gap is left behind.
+ *
+ * ":has(...)" means "a row that contains a blocked bar". The browser
+ * re-checks this automatically whenever the page changes, so new messages
+ * are hidden instantly and rows are shown again if you unblock someone.
+ */
+ol[data-list-id="chat-messages"] > :has([class*="blockedSystemMessage"]) {
+  display: none !important;
+}
+
+/*
+ * Rule 2: anywhere else (threads, search, etc.), hide the bar itself.
+ */
+[class*="blockedSystemMessage"] {
   display: none !important;
 }
