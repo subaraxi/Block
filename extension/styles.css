@@ -35,13 +35,12 @@ ol[data-list-id="chat-messages"] > :has([class*="blockedSystemMessage"]) {
 }
 
 /*
- * Rule 3: hide the "Replying to a blocked message" line that sits above a
- * reply. Only that line is hidden; the reply itself stays visible.
+ * Rule 3: hide the "Replying to ... Blocked message" line above a reply.
+ * Only that line is hidden; the reply itself stays visible.
  *
- * Discord gives every reply line an id starting with
- * "message-reply-context-". We hide it only if something inside it has
- * "blocked" in its class name (the "i" means upper/lower case doesn't matter).
+ * CSS can't look for text, so content.js finds these lines and marks them
+ * with this attribute.
  */
-[id^="message-reply-context-"]:has([class*="blocked" i]) {
+[data-hidden-blocked-message] {
   display: none !important;
 }

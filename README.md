@@ -47,8 +47,10 @@ See [PRIVACY.md](PRIVACY.md) for the full privacy policy.
 
 ## Limits
 
-- When someone replies to a blocked user, only the "Replying to a blocked
+- When someone replies to a blocked user, only the "Replying to ... Blocked
   message" line is hidden. Their reply itself still shows.
+- Reply lines are recognised by their "Blocked message" text. If your Discord
+  is in another language, use **Fix it** on one of those lines once.
 - Works on discord.com in the browser, not the Discord desktop app.
 - Not made by or affiliated with Discord.
 
