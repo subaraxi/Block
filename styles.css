@@ -1,0 +1,9 @@
+/*
+ * Anything content.js marks with this attribute disappears.
+ * We use an attribute instead of a class because Discord (React) rewrites
+ * an element's class list when it re-renders, but leaves unknown
+ * attributes alone.
+ */
+[data-hidden-blocked-message] {
+  display: none !important;
+}
