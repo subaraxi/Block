@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Hide Blocked Messages for Discord",
   "version": "1.4.0",
-  "description": "Completely hides messages from people you blocked on Discord in the browser, including replies to them.",
+  "description": "Completely hides messages from people you blocked on Discord, including replies to them.",
   "minimum_chrome_version": "105",
   "permissions": ["storage"],
   "icons": {
@@ -11,21 +11,11 @@
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "Hide Blocked Messages",
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    }
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://discord.com/*",
-        "https://ptb.discord.com/*",
-        "https://canary.discord.com/*"
-      ],
+      "matches": ["https://discord.com/*"],
       "css": ["styles.css"],
       "js": ["content.js"],
       "run_at": "document_start"

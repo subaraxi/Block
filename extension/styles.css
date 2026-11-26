@@ -1,46 +1,19 @@
 /*
- * Hide Blocked Messages for Discord
- *
- * When you block someone, Discord still shows a bar in chat:
- *   "1 blocked message — Show message"
- * These rules hide that bar completely, so it looks like the messages
- * were never there.
- *
- * Discord's class names have random endings that change between updates
- * (e.g. "blockedSystemMessage_a1b2c3"), so we match only the part of the
- * name that stays the same.
- *
- * If Discord renames something, users can fix it themselves with the
- * "Fix it" button (see content.js). To fix it for everyone, update the
- * names below.
+ * Discord's class names end in random letters that change with updates
+ * (e.g. "blockedSystemMessage_a1b2c3"), so we only match the start.
  */
 
-/*
- * Rule 1: in the chat, hide the whole row that holds the blocked bar,
- * so no empty gap is left behind.
- *
- * ":has(...)" means "a row that contains a blocked bar". The browser
- * re-checks this automatically whenever the page changes, so new messages
- * are hidden instantly and rows are shown again if you unblock someone.
- */
+/* Hide the chat row holding a "1 blocked message — Show message" bar. */
 ol[data-list-id="chat-messages"] > :has([class*="blockedSystemMessage"]) {
   display: none !important;
 }
 
-/*
- * Rule 2: anywhere else (threads, search, etc.), hide the bar itself.
- */
+/* Hide the bar anywhere else too (threads, search, ...). */
 [class*="blockedSystemMessage"] {
   display: none !important;
 }
 
-/*
- * Rule 3: hide the "Replying to ... Blocked message" line above a reply.
- * Only that line is hidden; the reply itself stays visible.
- *
- * CSS can't look for text, so content.js finds these lines and marks them
- * with this attribute.
- */
+/* Hide whatever content.js marked, e.g. "Blocked message" reply lines. */
 [data-hidden-blocked-message] {
   display: none !important;
 }

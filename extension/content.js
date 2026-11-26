@@ -1,19 +1,8 @@
 /*
- * Hide Blocked Messages for Discord
- *
- * styles.css hides the "1 blocked message — Show message" bars.
- * This file does two more things:
- *
- *   Part 1: hide the "Replying to ... Blocked message" line above replies.
- *           Discord shows "Blocked message" there in italics, so we look
- *           for that text (CSS can't match text, so this needs a script).
- *
- *   Part 2: the "Fix it" tool. If a Discord update makes a blocked message
- *           show up again, the user clicks the extension icon, then
- *           "Fix it", then the message. We save what it looks like and hide
- *           it from then on.
- *
- * Saved fixes stay in Chrome's storage. Nothing is sent anywhere.
+ * styles.css hides the blocked-message bars. This file adds:
+ *   Part 1: hiding "Blocked message" reply lines (CSS can't match text).
+ *   Part 2: the "Fix it" tool for when a Discord update breaks the hiding.
+ * Fixes are saved in Chrome's storage. Nothing is sent anywhere.
  */
 
 // The list that holds the messages of the open channel.
