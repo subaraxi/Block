@@ -30,11 +30,3 @@ By default, when someone you didn't block replies to someone you did, only
 the "Blocked message" line above their reply is hidden. To hide the whole
 reply, click the extension icon and tick **Also hide replies to blocked
 people**.
-
-## Is it safe?
-
-Yes. It only runs on discord.com, can't read your messages or account, and
-never sends anything anywhere. Its one permission, **storage**, just
-remembers your fixes.
-
-Works in Chrome, not the Discord desktop app. Not affiliated with Discord.
