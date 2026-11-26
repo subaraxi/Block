@@ -64,6 +64,18 @@
         cursor: default;
       }
 
+      label {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-top: 8px;
+        cursor: pointer;
+      }
+
+      label input {
+        margin: 3px 0 0;
+      }
+
       #status {
         min-height: 1.45em;
         margin: 4px 0 0;
@@ -76,6 +88,11 @@
 
     <button id="fix-it" class="primary">Fix it</button>
     <button id="undo">Undo my fixes</button>
+
+    <label>
+      <input type="checkbox" id="hide-whole-replies" />
+      Also hide replies to blocked people
+    </label>
 
     <p id="status"></p>
 
