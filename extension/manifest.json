@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Hide Blocked Messages for Discord",
-  "version": "1.6.0",
+  "name": "Block for Real – Hide Blocked Users on Discord",
+  "short_name": "Block for Real",
+  "version": "1.6.1",
   "description": "Completely hides messages from people you blocked on Discord, including replies to them.",
   "minimum_chrome_version": "105",
   "permissions": ["storage"],
